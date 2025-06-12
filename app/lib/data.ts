@@ -9,7 +9,15 @@ import {
 } from './definitions';
 import { formatCurrency } from './utils';
 
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+const sql = postgres(process.env.POSTGRES_URL!, {
+  ssl: { rejectUnauthorized: false }, // <-- This is the key change!
+  max: 1,
+  idle_timeout: 30,
+  connect_timeout: 60,
+  connection: {
+    application_name: 'nextjs-dashboard-dev'
+  }
+});
 
 export async function fetchRevenue() {
   try {
