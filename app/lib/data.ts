@@ -10,12 +10,8 @@ import {
 import { formatCurrency } from './utils';
 
 const sql = postgres(process.env.POSTGRES_URL!, {
-  ssl: { rejectUnauthorized: false }, // <-- This is the key change!
-  max: 1,
-  idle_timeout: 30,
-  connect_timeout: 60,
-  connection: {
-    application_name: 'nextjs-dashboard-dev'
+  ssl: {
+    require: true,
   }
 });
 
@@ -25,7 +21,7 @@ export async function fetchRevenue() {
     // Don't do this in production :)
 
     console.log('Fetching revenue data...');
-    await new Promise((resolve) => setTimeout(resolve, 3000));
+    await new Promise((resolve) => setTimeout(resolve, 10000));
 
     const data = await sql<Revenue[]>`SELECT * FROM revenue`;
 
